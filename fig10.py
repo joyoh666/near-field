@@ -73,9 +73,9 @@ for i, pi in enumerate(phi):
     r_found = False
 
     # Case 1: 점이 안테나 길이 내에 있는 경우(|x| <= D/2)
-    A1 = cos_pi**2 - gamma**(1.25)
-    B1 = -gamma**(1.25) * D * abs_sin
-    C1 = -gamma**(1.25) * (D**2) / 4
+    A1 = cos_pi**2 - gamma**(4/3)
+    B1 = -gamma**(4/3) * D * abs_sin
+    C1 = -gamma**(4/3) * (D**2) / 4
 
     if A1 != 0:
         det1 = B1**2 - 4*A1*C1
@@ -96,7 +96,7 @@ for i, pi in enumerate(phi):
     #Case 2: 점이 안테나 길이를 벗어난 경우(|x| > D/2)
     if not r_found:
         A2 = 1.0
-        B2 = -D * abs_sin * (1+gamma**(1.25))/(1-gamma**(1.25))
+        B2 = -D * abs_sin * (1+gamma**(4/3))/(1-gamma**(4/3))
         C2 = (D**2) / 4
 
         det2 = B2**2 - 4*A2*C2

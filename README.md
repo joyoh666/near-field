@@ -4,7 +4,7 @@ phase error를 기준으로 해서 거리를 구분하면 다음과 같다.
 2. Fresnel distance($d_F$)
    Fresnel distance는 radiative near-field와 reactive near-fiela를 구분하는 지표이다.
 
-좌표평면에서 UE의 위치 벡터를 $\mathbf{r} = [r\cos\theta,r\sin\theta]^T$, BS의 위치 벡터를 $\mathbf{s}_n = [nd,0]^T$라고 할 때, 
+좌표평면에서 UE의 위치 벡터를 $\mathbf{r} = [x,y]^T = [r\cos\theta,r\sin\theta]^T$, BS의 위치 벡터를 $\mathbf{s}_n = [nd,0]^T$라고 할 때, 
 $$||\mathbf{r}-\mathbf{s}_n|| = \sqrt{r^2+n^2d^2-2rnd\cos\theta}$$
 라고 할 수 있다. 
 
@@ -29,5 +29,40 @@ Rayleigh distance와 Fresnel distance를 통해 현재 전자기파가 평면파
 
 phase error가 아닌 power variation을 기준으로 해서 서로 다른 region을 구분할 수 있다.
 Uniform Power Distance : 전자기파의 세기가 일정한지, 아니면 거리에 따라 변하는 지를 구분하는 지표이다. phase error와는 기준이 다르기 때문에, far-field이어도 non-uniform power일 수도 있다.
+$$\begin{aligned}r_{UPD} &= \argmin\limits_r r \\
+&s.t. \ \frac{\min\beta_{m,n}}{\max\beta_{m,n}} >= \Gamma (논문에서는 \ 0.95로 \ 설정)
+\end{aligned}
+$$
 
-1) USW model : 
+1) USW model : UE의 거리가 uniform power distance보다 큰 경우, 전자기파의 amplitude는 일정하다고 가정
+
+2) NUSW model
+   - UE의 거리가 uniform power distance보다 작은 경우
+   - 전자기파의 ampliude가 거리에 따라 달라진다. 
+
+   $$\beta_{m,n} = \frac{1}{\sqrt{4\pi \Vert \mathbf{r}_m-\mathbf{s}_n \Vert^2}}$$
+
+
+   $$
+   \begin{aligned}
+   1.& \ |x| <= \frac{D}{2} :\ d_{min}^2 = y^2 \ , \ d_{max}^2 = y^2 + (|x| + \frac{D}{2})^2 \\ 
+   2.& \ |x| > \frac{D}{2}  \ d_{min}^2 = y^2 + (|x| - \frac{D}{2})^2 \ , \ d_{max}^2 = y^2 + (|x| + \frac{D}{2})^2 \\
+     &\frac{\frac{1}{\sqrt{4\pi d_{max}^2}}}{\frac{1}{\sqrt{4\pi d_{min}^2}}} \rightarrow \frac{d_{min}^2}{d_{max}^2} = \Gamma^2
+   \end{aligned}
+   $$
+   
+   위의 식에 $d_{min},d_{max}$을 대입한 후에 $(x,y) = (r\cos\theta,r\sin\theta)$로 바꿔서 식을 정리하면, r에 대한 이차방정식이 나온다. 조건에 맞는 r값을 구하면 UPD값을 얻을 수 있다.
+
+3) General model
+    - 전자기파의 amplitude가 거리, effective aperture loss, polarization loss에 따라 달라진다.
+    - Effective aperture loss : 안테나의 위치에 따라 전자기파가 수신되는 각도가 달라지는데, 이에 의해 발생하는 손실을 의미한다.
+    - Polarization loss : 전자기파는 진행 방향에 수직인 방향으로 진동을 하는데, 수신단에서 이와 같은 방향으로 진동하는 것을 받지 않을 때 나타나는 손실을 의미한다.
+
+    $$\beta_{m,n}^G = \sqrt{\frac{G_1G_2}{4\pi \Vert \mathbf{r}_m-\mathbf{s}_n \Vert^2}} \ , \ G_1 : effective\ aperture\ loss, \  G_2 : polarization\ loss$$
+
+    - ULA가 x-z plane에 있다고 가정하므로 transmit antenna의 normal vector $\hat{\mathbf{u}_s} = [0,1,0]^T$
+    - $G_1 = \frac{y}{d}$ 
+    - 진행 방향이 y축이므로 진동 방향은 x축, $\rho_w = [1,0,0]^T = \hat{\mathbf{J}}$
+    - $G_2 = \frac{y^2}{d^2}$
+    - UPD 구하는 공식에 loss들을 대입하면, (G1만 대입, G2는 안테나 모양에 따라 식이 달라지기 때문에 제외)
+     $$\sqrt{\frac{d_{min}^3}{d_{max}^3}} = \Gamma \rightarrow \frac{d_{min}^2}{d_{max}^2} = \Gamma^{4/3}$$
