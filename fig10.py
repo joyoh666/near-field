@@ -12,12 +12,12 @@ D = (N - 1) * d     # 안테나 전체 크기 (Aperture)
 gamma = 0.95        #min threshold
 
 
-phi = np.linspace(-np.pi,np.pi,1000)
+phi = np.linspace(-np.pi/2,np.pi/2,1000)
 r_R = (2*(D*np.cos(phi))**2)/lamda      #Rayleigh distance
 r_F = np.sqrt(np.abs((D**3)*np.sin(phi)*((np.cos(phi))**2))/lamda) # Fresnel distance
 
-r_UPD = np.zeros_like(phi)
 #NUSW model의 UPD
+r_UPD = np.zeros_like(phi)
 for i, pi in enumerate(phi):
     sin_pi = np.sin(pi)
     cos_pi = np.cos(pi)
@@ -73,9 +73,9 @@ for i, pi in enumerate(phi):
     r_found = False
 
     # Case 1: 점이 안테나 길이 내에 있는 경우(|x| <= D/2)
-    A1 = cos_pi**2 - gamma**(0.4)
-    B1 = -gamma**(0.4) * D * abs_sin
-    C1 = -gamma**(0.4) * (D**2) / 4
+    A1 = cos_pi**2 - gamma**(1.25)
+    B1 = -gamma**(1.25) * D * abs_sin
+    C1 = -gamma**(1.25) * (D**2) / 4
 
     if A1 != 0:
         det1 = B1**2 - 4*A1*C1
@@ -96,7 +96,7 @@ for i, pi in enumerate(phi):
     #Case 2: 점이 안테나 길이를 벗어난 경우(|x| > D/2)
     if not r_found:
         A2 = 1.0
-        B2 = -D * abs_sin * (1+gamma**(0.4))/(1-gamma**(0.4))
+        B2 = -D * abs_sin * (1+gamma**(1.25))/(1-gamma**(1.25))
         C2 = (D**2) / 4
 
         det2 = B2**2 - 4*A2*C2
@@ -157,20 +157,25 @@ ax_ins.grid(True, linestyle=':', alpha=0.4)
 # ---------------------------------------------------------
 
 #plot Rayleigh distance
-ax.plot(y_R, x_R, 'b--', label='Rayleigh distance (eff. aperture)', linewidth=2)
+ax.plot(y_R, x_R, 'b--', label='Rayleigh distance', linewidth=2)
 ax_ins.plot(y_R, x_R, 'b--', linewidth=2)
 
 #plot Fresnel distance
-ax.plot(y_F, x_F, 'g--', label='Fresnel distance (eff. aperture)', linewidth=2)
+ax.plot(y_F, x_F, 'g--', label='Fresnel distance', linewidth=2)
 ax_ins.plot(y_F, x_F, 'g--', linewidth=2)
 
 #plot UPD (NUSW model) 
-ax.plot(y_UPD, x_UPD, color='purple', linestyle='dotted', label='UPD (NUSW model)', linewidth=2)
+ax.plot(y_UPD, x_UPD, color='purple', linestyle='dotted', label='Uniform-Power distance, NUSW', linewidth=2)
 ax_ins.plot(y_UPD, x_UPD, color='purple', linestyle='dotted', linewidth=2)
 
 #plot general model
-ax.plot(y_general, x_general, color='red', linestyle='solid', label='General model', linewidth=2)
+ax.plot(y_general, x_general, color='red', linestyle='solid', label='Uniform-Power distance, General', linewidth=2)
 ax_ins.plot(y_general, x_general, color='red', linestyle='solid', linewidth=2)
+
+ax.legend(loc='upper right',       # 위치 (우측 상단)
+          bbox_to_anchor=(1.0, 1.0), # 세부 위치 미세 조정 (x, y 비율)
+          fontsize=11,             # 폰트 크기
+          frameon=False)           # 테두리 상자 없애기
 
 plt.tight_layout()
 plt.show()
