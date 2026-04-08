@@ -15,7 +15,7 @@ $$
 가 된다.
 
  Rayleigh distance는 far-field인지를 판단하는 지표이므로 거리 차이가 일차 식으로 표현되어 평면파가 나타날 수 있어야 한다. 관습적으로, phase error가 $\pi/8$ 정도이면 근사적으로 무시할 수 있기 때문에 Rayleigh distance는 2차항이 $\pi/8$이 되게 하는 r값으로 표현이 가능하다. 
- $$\frac{2\pi}{\lambda}\times\frac{n^2d^2\sin^2\theta}{2r}=\frac{\pi}{8} \rightarrow r = \frac{8}{\lambda}n^2d^2\sin^2\theta$$
+ $$\frac{2\pi}{\lambda}\times\frac{n^2d^2\cos^2\theta}{2r}=\frac{\pi}{8} \rightarrow r = \frac{8}{\lambda}n^2d^2\cos^2\theta$$
  이때, 안테나 배열의 중심에서 멀리 떨어진 안테나일수록, n의 값이 커져서 phase error가 커지는데, 가장 phase error가 큰 안테나의 error가 $\pi/8$이면 되므로, nd 위치에 D/2(D : 안테나 배열의 길이)를 넣어서 계산하면, 
  $$d_R = \frac{2D^2\cos^2\theta}{\lambda}$$
  가 된다.   (안테나 배열의 중심이 좌표평면 상에서 원점에 위치한다고 가정 , 안테나 : ULA)
